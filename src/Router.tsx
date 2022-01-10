@@ -12,6 +12,7 @@ import User from './screens/User';
 import Home from './screens/Home';
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
+import Place from './screens/Place';
 
 export default function Router() {
   //
@@ -31,6 +32,7 @@ export default function Router() {
           <Route path='/sign-in' element={<SignIn />} />
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/user' element={<User />} />
+          <Route path='/place/:id' element={<Place />} />
         </Routes>
       )}
     </>

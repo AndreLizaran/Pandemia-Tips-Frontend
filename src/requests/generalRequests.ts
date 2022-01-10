@@ -2,11 +2,14 @@
 import axiosInstance from '../utils/axios';
 
 export type PlaceInformation = {
+  _id: string;
   description: string;
   title: string;
   rate: number;
   images: string[];
   categories: string[];
+  tips: string[];
+  address: string;
 };
 
 type GetPlacesInformationRequestType = {
@@ -58,5 +61,11 @@ export function validateTokenRequest(payload: string) {
   return axiosInstance.post<ValidateTokenRequestType>(
     '/user/validate-token',
     payload
+  );
+}
+
+export function getPlaceInformationRequest(payload: string) {
+  return axiosInstance.post<PlaceInformation>(
+    `place/place-information/${payload}`
   );
 }

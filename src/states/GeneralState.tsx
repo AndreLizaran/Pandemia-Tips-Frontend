@@ -7,6 +7,7 @@ import GeneralReducer from '../reducers/GeneralReducer';
 
 // Requests
 import {
+  getPlaceInformationRequest,
   getPlacesInformationRequest,
   signInUserRequest,
   signUpUserRequest,
@@ -44,8 +45,8 @@ export const GeneralContext = createContext({
   }) {},
   validateToken: function (payload: string) {},
   // Places functions
+  getPlaceInformation: function (payload: string) {},
   getPlacesInformation: function () {},
-  getPlaceInformation: function () {},
   addPlaceToFavorites: function () {},
   removePlaceFromFavorites: function () {},
 });
@@ -120,9 +121,15 @@ export default function GeneralState({ children }: GeneralStateProps) {
     }
   }
 
-  function getPlaceInformation() {
+  async function getPlaceInformation(payload: string) {
     try {
-    } catch (error: any) {}
+      dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: true });
+      const { data } = await getPlaceInformationRequest(payload);
+      console.log(data);
+      dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });
+    } catch (error: any) {
+      dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });
+    }
   }
 
   function addPlaceToFavorites() {

@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Classes
 import {
-  blackButton,
   blueButton,
   generalTitle,
   neutralButton,
@@ -16,6 +15,7 @@ import {
 import Container from '../components/Container';
 import { GeneralContext } from '../states/GeneralState';
 import { PlaceInformation } from '../requests/generalRequests';
+import { NavLink } from 'react-router-dom';
 
 export default function Home() {
   //
@@ -87,7 +87,7 @@ function PlacesInformationContainer() {
     <div className='flex flex-col lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-white rounded-b'>
       {placesInformation.map((place, key: number) => (
         //@ts-ignore
-        <PlaceElement place={place} key={key} />
+        <PlaceElement place={place} key={place._id} />
       ))}
     </div>
   );
@@ -98,7 +98,7 @@ type PlaceElementProps = {
 };
 
 function PlaceElement({
-  place: { title, description, rate },
+  place: { title, description, _id },
 }: PlaceElementProps) {
   //
   return (
@@ -116,9 +116,11 @@ function PlaceElement({
           <button className={yellowButton} title='Agregar a favoritos'>
             <FontAwesomeIcon icon={faStar} />
           </button>
-          <button className={neutralButton} title='Ver detalles'>
-            Ver lugar
-          </button>
+          <NavLink to={`/place/${_id}}]`}>
+            <button className={neutralButton} title='Ver detalles'>
+              Ver lugar
+            </button>
+          </NavLink>
           <button className={blueButton} title='Ver fotos del lugar'>
             <FontAwesomeIcon icon={faEye} />
           </button>

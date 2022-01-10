@@ -7,6 +7,10 @@ import {
 
 type ActionType =
   | {
+      type: 'SET_LOADING_GET_PLACE_INFORMATION';
+      payload: boolean;
+    }
+  | {
       type: 'SET_LOADING_GET_PLACES_INFORMATION';
       payload: boolean;
     }
@@ -37,6 +41,11 @@ export default function GeneralReducer(
 ): InitialStateType {
   //
   switch (action.type) {
+    case 'SET_LOADING_GET_PLACE_INFORMATION':
+      return {
+        ...state,
+        loadingGetPlacesInformation: action.payload,
+      };
     case 'SET_LOADING_GET_PLACES_INFORMATION':
       return {
         ...state,
