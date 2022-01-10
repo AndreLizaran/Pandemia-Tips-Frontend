@@ -8,7 +8,7 @@ export type InitialStateType = {
   // Loading user
   loadingSignInUser: boolean;
   loadingSignUpUser: boolean;
-  loadingValidatingToken: boolean;
+  loadingValidateToken: boolean;
   // Loading places
   loadingCategories: boolean;
   loadingGetPlaceInformation: boolean;

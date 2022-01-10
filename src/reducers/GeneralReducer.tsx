@@ -1,6 +1,9 @@
 // Types
 import { InitialStateType } from '../states/GeneralState-types';
-import { PlaceInformation } from '../requests/generalRequests';
+import {
+  PlaceInformation,
+  SignInRequestType,
+} from '../requests/generalRequests';
 
 type ActionType =
   | {
@@ -10,6 +13,22 @@ type ActionType =
   | {
       type: 'SET_PLACES_INFORMATION';
       payload: PlaceInformation[];
+    }
+  | {
+      type: 'SET_LOADING_SIGN_IN_USER';
+      payload: boolean;
+    }
+  | {
+      type: 'SET_LOADING_SIGN_UP_USER';
+      payload: boolean;
+    }
+  | {
+      type: 'SET_LOADING_VALIDATE_TOKEN';
+      payload: boolean;
+    }
+  | {
+      type: 'SET_USER_INFORMATION';
+      payload: SignInRequestType;
     };
 
 export default function GeneralReducer(
@@ -27,6 +46,26 @@ export default function GeneralReducer(
       return {
         ...state,
         placesInformation: action.payload,
+      };
+    case 'SET_LOADING_SIGN_IN_USER':
+      return {
+        ...state,
+        loadingSignInUser: action.payload,
+      };
+    case 'SET_LOADING_SIGN_UP_USER':
+      return {
+        ...state,
+        loadingSignUpUser: action.payload,
+      };
+    case 'SET_USER_INFORMATION':
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case 'SET_LOADING_VALIDATE_TOKEN':
+      return {
+        ...state,
+        loadingValidateToken: action.payload,
       };
     default:
       return state;

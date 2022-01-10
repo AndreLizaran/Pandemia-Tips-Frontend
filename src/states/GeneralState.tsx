@@ -1,11 +1,17 @@
 // Modules
 import { createContext, ReactNode, useReducer } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Reducers
 import GeneralReducer from '../reducers/GeneralReducer';
 
 // Requests
-import { getPlacesInformationRequest } from '../requests/generalRequests';
+import {
+  getPlacesInformationRequest,
+  signInUserRequest,
+  signUpUserRequest,
+  validateTokenRequest,
+} from '../requests/generalRequests';
 
 // Types
 import { InitialStateType } from './GeneralState-types';
@@ -20,7 +26,7 @@ const initialState: InitialStateType = {
   // Loadings user
   loadingSignInUser: false,
   loadingSignUpUser: false,
-  loadingValidatingToken: true,
+  loadingValidateToken: true,
   // Loading places
   loadingCategories: false,
   loadingGetPlaceInformation: false,
@@ -36,7 +42,7 @@ export const GeneralContext = createContext({
     email: string;
     password: string;
   }) {},
-  validateToken: function (payload: { token: string }) {},
+  validateToken: function (payload: string) {},
   // Places functions
   getPlacesInformation: function () {},
   getPlaceInformation: function () {},
@@ -47,32 +53,57 @@ export const GeneralContext = createContext({
 type GeneralStateProps = {
   children: ReactNode;
 };
+
 export default function GeneralState({ children }: GeneralStateProps) {
   //
+  const navigator = useNavigate();
   const [state, dispatch] = useReducer(GeneralReducer, initialState);
 
-  function signIn(payload: { email: string; password: string }) {
+  async function signIn(payload: { email: string; password: string }) {
     try {
-    } catch (error: any) {}
+      dispatch({ type: 'SET_LOADING_SIGN_IN_USER', payload: true });
+      const { data } = await signInUserRequest(payload);
+      navigator('/');
+      dispatch({ type: 'SET_USER_INFORMATION', payload: data });
+      localStorage.setItem('pand-tips', data.token);
+      dispatch({ type: 'SET_LOADING_SIGN_IN_USER', payload: false });
+    } catch (error: any) {
+      console.log(error);
+      dispatch({ type: 'SET_LOADING_SIGN_IN_USER', payload: false });
+    }
   }
 
-  function signUp(payload: {
+  async function signUp(payload: {
     displayName: string;
     email: string;
     password: string;
   }) {
     try {
-    } catch (error: any) {}
+      dispatch({ type: 'SET_LOADING_SIGN_UP_USER', payload: true });
+      const { data } = await signUpUserRequest(payload);
+      navigator('/');
+      dispatch({ type: 'SET_USER_INFORMATION', payload: data });
+      localStorage.setItem('pand-tips', data.token);
+      dispatch({ type: 'SET_LOADING_SIGN_UP_USER', payload: false });
+    } catch (error: any) {
+      console.log(error);
+      dispatch({ type: 'SET_LOADING_SIGN_UP_USER', payload: false });
+    }
   }
 
-  function validateToken(payload: { token: string }) {
-    try {
-    } catch (error: any) {}
-  }
-
-  function getPlaceInformation() {
-    try {
-    } catch (error: any) {}
+  async function validateToken(token: string) {
+    if (token) {
+      try {
+        dispatch({ type: 'SET_LOADING_VALIDATE_TOKEN', payload: true });
+        const { data } = await validateTokenRequest(token);
+        dispatch({ type: 'SET_USER_INFORMATION', payload: data });
+        localStorage.setItem('pand-tips', data.token);
+        dispatch({ type: 'SET_LOADING_VALIDATE_TOKEN', payload: false });
+      } catch (error: any) {
+        console.log(error);
+        dispatch({ type: 'SET_LOADING_VALIDATE_TOKEN', payload: false });
+      }
+    } else dispatch({ type: 'SET_LOADING_VALIDATE_TOKEN', payload: false });
   }
 
   async function getPlacesInformation() {
@@ -83,6 +114,14 @@ export default function GeneralState({ children }: GeneralStateProps) {
       } = await getPlacesInformationRequest();
       dispatch({ type: 'SET_PLACES_INFORMATION', payload: data });
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: false });
+    } catch (error: any) {
+      console.log(error);
+      dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: false });
+    }
+  }
+
+  function getPlaceInformation() {
+    try {
     } catch (error: any) {}
   }
 

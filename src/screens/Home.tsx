@@ -9,6 +9,7 @@ import {
   blueButton,
   generalTitle,
   neutralButton,
+  yellowButton,
 } from '../utils/classes';
 
 // Components
@@ -26,7 +27,7 @@ export default function Home() {
 
   return (
     <Container>
-      <div className='flex flex-row md:grid md:grid-cols-12 md:gap-6'>
+      <div className='flex flex-row md:grid md:grid-cols-12 md:gap-6 w-full'>
         <PlacesInformationColumn />
         <CategoryInformationColumn />
       </div>
@@ -39,8 +40,8 @@ function PlacesInformationColumn() {
   const { loadingGetPlacesInformation } = useContext(GeneralContext);
 
   return (
-    <div className='flex flex-col gap-6 md:col-start-1 md:col-end-8 lg:col-end-10'>
-      <div className='px-6 py-4 bg-neutral-600 rounded'>
+    <div className='flex flex-col md:col-start-1 md:col-end-8 lg:col-end-10 w-full'>
+      <div className='px-6 py-4 bg-neutral-600 rounded-t'>
         <h2 className={generalTitle}>Lugares</h2>
       </div>
       {loadingGetPlacesInformation ? (
@@ -57,8 +58,8 @@ function CategoryInformationColumn() {
   const { loadingGetPlacesInformation } = useContext(GeneralContext);
 
   return (
-    <div className='hidden md:flex flex-col gap-6 md:col-start-8 md:col-end-13 lg:col-start-10'>
-      <div className='px-6 py-4 bg-neutral-600 rounded'>
+    <div className='hidden md:flex flex-col md:col-start-8 md:col-end-13 lg:col-start-10'>
+      <div className='px-6 py-4 bg-neutral-600 rounded-t'>
         <h2 className={generalTitle}>Categorias</h2>
       </div>
       {loadingGetPlacesInformation ? <LoadingCard /> : <CategoriesContainer />}
@@ -70,7 +71,7 @@ function LoadingCard() {
   //
   return (
     <div
-      className='bg-white rounded px-6 py-4 flex justify-center items-center'
+      className='bg-white rounded-b px-6 py-4 flex justify-center items-center'
       style={{ minHeight: '65vh' }}
     >
       <FontAwesomeIcon icon={faSpinner} size='2x' className='fa-spin' />
@@ -83,7 +84,7 @@ function PlacesInformationContainer() {
   const { placesInformation } = useContext(GeneralContext);
 
   return (
-    <div className='flex flex-col lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-white'>
+    <div className='flex flex-col lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-white rounded-b'>
       {placesInformation.map((place, key: number) => (
         //@ts-ignore
         <PlaceElement place={place} key={key} />
@@ -112,13 +113,13 @@ function PlaceElement({
         <h3 className='text-lg font-semibold text-gray-800'>{title}</h3>
         <p className='mb-4'>{description}</p>
         <div className='flex gap-4'>
-          <button className={blueButton} title='Agregar a favoritos'>
+          <button className={yellowButton} title='Agregar a favoritos'>
             <FontAwesomeIcon icon={faStar} />
           </button>
           <button className={neutralButton} title='Ver detalles'>
             Ver lugar
           </button>
-          <button className={blackButton} title='Ver fotos del lugar'>
+          <button className={blueButton} title='Ver fotos del lugar'>
             <FontAwesomeIcon icon={faEye} />
           </button>
         </div>
@@ -130,7 +131,7 @@ function PlaceElement({
 function CategoriesContainer() {
   //
   return (
-    <div className='bg-white rounded p-6 flex flex-col gap-6'>
+    <div className='bg-white rounded-b p-6 flex flex-col gap-6'>
       <CategoryElement />
       <CategoryElement />
       <CategoryElement />

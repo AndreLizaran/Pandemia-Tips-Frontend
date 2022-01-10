@@ -9,13 +9,54 @@ export type PlaceInformation = {
   categories: string[];
 };
 
-type getPlacesInformationRequestType = {
+type GetPlacesInformationRequestType = {
   ok: boolean;
   data: PlaceInformation[];
 };
 
 export function getPlacesInformationRequest() {
-  return axiosInstance.get<getPlacesInformationRequestType>(
+  return axiosInstance.get<GetPlacesInformationRequestType>(
     '/place/places-information'
+  );
+}
+
+export type SignInRequestType = {
+  displayName: string;
+  token: string;
+};
+
+type SignInUserRequestProps = {
+  email: string;
+  password: string;
+};
+
+export function signInUserRequest(payload: SignInUserRequestProps) {
+  return axiosInstance.post<SignInRequestType>('/user/sign-in', payload);
+}
+
+type SignUpRequestType = {
+  displayName: string;
+  token: string;
+};
+
+type SignUpUserRequestProps = {
+  displayName: string;
+  email: string;
+  password: string;
+};
+
+export function signUpUserRequest(payload: SignUpUserRequestProps) {
+  return axiosInstance.post<SignUpRequestType>('/user/sign-up', payload);
+}
+
+type ValidateTokenRequestType = {
+  displayName: string;
+  token: string;
+};
+
+export function validateTokenRequest(payload: string) {
+  return axiosInstance.post<ValidateTokenRequestType>(
+    '/user/validate-token',
+    payload
   );
 }
