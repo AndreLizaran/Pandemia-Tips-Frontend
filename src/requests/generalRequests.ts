@@ -52,7 +52,7 @@ export function validateTokenRequest(payload: string) {
   });
 }
 
-type GetPlacesInformationRequestType = PlaceInformation[];
+export type GetPlacesInformationRequestType = PlaceInformation[];
 
 export function getPlacesInformationRequest() {
   return axiosInstance.get<GetPlacesInformationRequestType>(

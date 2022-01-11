@@ -1,6 +1,11 @@
 // Modules
 import { useContext, useEffect } from 'react';
-import { faEye, faSpinner, faStar } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEye,
+  faSpinner,
+  faStar,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Classes
@@ -8,6 +13,7 @@ import {
   blueButton,
   generalTitle,
   neutralButton,
+  redButton,
   yellowButton,
 } from '../utils/classes';
 
@@ -27,7 +33,7 @@ export default function Home() {
 
   return (
     <Container>
-      <div className='flex flex-row md:grid md:grid-cols-12 md:gap-6 w-full'>
+      <div className='flex flex-col md:grid md:grid-cols-12 gap-6 w-full'>
         <PlacesInformationColumn />
         <CategoryInformationColumn />
       </div>
@@ -37,12 +43,20 @@ export default function Home() {
 
 function PlacesInformationColumn() {
   //
-  const { loadingGetPlacesInformation } = useContext(GeneralContext);
+  const { loadingGetPlacesInformation, categorySelected, setCategorySelected } =
+    useContext(GeneralContext);
 
   return (
-    <div className='flex flex-col md:col-start-1 md:col-end-8 lg:col-end-10 w-full'>
-      <div className='px-6 py-4 bg-neutral-600 rounded-t'>
-        <h2 className={generalTitle}>Lugares</h2>
+    <div className='flex flex-col md:col-start-1 md:col-end-9 w-full'>
+      <div className='px-6 py-4 bg-neutral-600 rounded-t flex justify-between items-center'>
+        <h2 className={generalTitle}>
+          {categorySelected ? categorySelected : 'Lugares'}
+        </h2>
+        {categorySelected && (
+          <button className={redButton} onClick={() => setCategorySelected('')}>
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        )}
       </div>
       {loadingGetPlacesInformation ? (
         <LoadingCard />
@@ -58,7 +72,7 @@ function CategoryInformationColumn() {
   const { loadingGetPlacesInformation } = useContext(GeneralContext);
 
   return (
-    <div className='hidden md:flex flex-col md:col-start-8 md:col-end-13 lg:col-start-10'>
+    <div className='flex flex-col md:col-start-9 md:col-end-13'>
       <div className='px-6 py-4 bg-neutral-600 rounded-t'>
         <h2 className={generalTitle}>Categorias</h2>
       </div>
@@ -132,19 +146,30 @@ function PlaceElement({
 
 function CategoriesContainer() {
   //
+  const { categories } = useContext(GeneralContext);
+
   return (
-    <div className='bg-white rounded-b p-6 flex flex-col gap-6'>
-      <CategoryElement />
-      <CategoryElement />
-      <CategoryElement />
+    <div className='bg-white rounded-b p-6 flex flex-col xl:grid xl:grid-cols-2 gap-6'>
+      {categories.map((category) => (
+        <CategoryElement category={category} key={category} />
+      ))}
     </div>
   );
 }
 
-function CategoryElement() {
+function CategoryElement({ category }: { category: string }) {
+  const { setCategorySelected, categorySelected } = useContext(GeneralContext);
+
   return (
-    <div className='rounded bg-neutral-400 hover:bg-neutral-300 px-4 py-3 cursor-pointer'>
-      <h4 className='font-semibold text-white'>Categoría 1</h4>
+    <div
+      className={`rounded px-4 py-3 cursor-pointer ${
+        category === categorySelected
+          ? 'bg-neutral-600 hover:bg-neutral-500'
+          : 'bg-neutral-400 hover:bg-neutral-300'
+      }`}
+      onClick={() => setCategorySelected(category)}
+    >
+      <h4 className='font-semibold text-white'>{category}</h4>
     </div>
   );
 }

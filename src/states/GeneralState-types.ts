@@ -6,6 +6,8 @@ export type InitialStateType = {
   placeInformation: PlaceInformation | null;
   placesInformation: PlaceInformation[];
   favoritePlacesInformation: PlaceInformation[];
+  categories: string[];
+  categorySelected: string;
   // Loading user
   loadingSignInUser: boolean;
   loadingSignUpUser: boolean;

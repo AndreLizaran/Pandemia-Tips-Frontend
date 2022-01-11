@@ -99,7 +99,7 @@ type TipsContainerProps = {
 
 function TipsContainer({ tips }: TipsContainerProps) {
   return (
-    <ul className='flex flex-col gap-6'>
+    <ul className='flex flex-col xl:grid xl:grid-cols-2 gap-6'>
       {tips.map((tip, key) => (
         <li key={key} className='px-4 py-2 rounded bg-neutral-200'>
           {tip}

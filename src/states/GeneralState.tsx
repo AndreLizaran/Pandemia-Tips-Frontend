@@ -9,6 +9,7 @@ import GeneralReducer from '../reducers/GeneralReducer';
 import {
   getPlaceInformationRequest,
   getPlacesInformationRequest,
+  GetPlacesInformationRequestType,
   signInUserRequest,
   signUpUserRequest,
   validateTokenRequest,
@@ -25,6 +26,8 @@ const initialState: InitialStateType = {
   placeInformation: null,
   placesInformation: [],
   favoritePlacesInformation: [],
+  categories: [],
+  categorySelected: '',
   // Loadings user
   loadingSignInUser: false,
   loadingSignUpUser: false,
@@ -50,6 +53,7 @@ export const GeneralContext = createContext({
   getPlacesInformation: function () {},
   addPlaceToFavorites: function () {},
   removePlaceFromFavorites: function () {},
+  setCategorySelected: function (payload: string) {},
 });
 
 type GeneralStateProps = {
@@ -112,12 +116,26 @@ export default function GeneralState({ children }: GeneralStateProps) {
     try {
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: true });
       const { data } = await getPlacesInformationRequest();
+      dispatch({
+        type: 'SET_CATEGORIES_INFORMATION',
+        payload: setCategories(data),
+      });
       dispatch({ type: 'SET_PLACES_INFORMATION', payload: data });
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: false });
     } catch (error: any) {
       console.log(error);
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: false });
     }
+  }
+
+  function setCategories(data: GetPlacesInformationRequestType) {
+    let categories: string[] = [];
+    data.map((place) => {
+      place.categories.map((category) => {
+        if (!categories.includes(category)) categories.push(category);
+      });
+    });
+    return categories;
   }
 
   async function getPlaceInformation(payload: string) {
@@ -129,6 +147,12 @@ export default function GeneralState({ children }: GeneralStateProps) {
     } catch (error: any) {
       dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });
     }
+  }
+
+  async function setCategorySelected(payload: string) {
+    try {
+      dispatch({ type: 'SET_CATEGORY_SELECTED', payload });
+    } catch (error: any) {}
   }
 
   function addPlaceToFavorites() {
@@ -149,6 +173,7 @@ export default function GeneralState({ children }: GeneralStateProps) {
     getPlacesInformation,
     addPlaceToFavorites,
     removePlaceFromFavorites,
+    setCategorySelected,
   };
 
   return (

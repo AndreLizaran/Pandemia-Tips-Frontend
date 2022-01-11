@@ -37,6 +37,14 @@ type ActionType =
   | {
       type: 'SET_USER_INFORMATION';
       payload: SignInRequestType;
+    }
+  | {
+      type: 'SET_CATEGORIES_INFORMATION';
+      payload: string[];
+    }
+  | {
+      type: 'SET_CATEGORY_SELECTED';
+      payload: string;
     };
 
 export default function GeneralReducer(
@@ -84,6 +92,16 @@ export default function GeneralReducer(
       return {
         ...state,
         placeInformation: action.payload,
+      };
+    case 'SET_CATEGORIES_INFORMATION':
+      return {
+        ...state,
+        categories: action.payload,
+      };
+    case 'SET_CATEGORY_SELECTED':
+      return {
+        ...state,
+        categorySelected: action.payload,
       };
     default:
       return state;
