@@ -22,6 +22,7 @@ const initialState: InitialStateType = {
   token: '',
   displayName: '',
   // Places
+  placeInformation: null,
   placesInformation: [],
   favoritePlacesInformation: [],
   // Loadings user
@@ -110,9 +111,7 @@ export default function GeneralState({ children }: GeneralStateProps) {
   async function getPlacesInformation() {
     try {
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: true });
-      const {
-        data: { data },
-      } = await getPlacesInformationRequest();
+      const { data } = await getPlacesInformationRequest();
       dispatch({ type: 'SET_PLACES_INFORMATION', payload: data });
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: false });
     } catch (error: any) {
@@ -125,7 +124,7 @@ export default function GeneralState({ children }: GeneralStateProps) {
     try {
       dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: true });
       const { data } = await getPlaceInformationRequest(payload);
-      console.log(data);
+      dispatch({ type: 'SET_PLACE_INFORMATION', payload: data });
       dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });
     } catch (error: any) {
       dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });

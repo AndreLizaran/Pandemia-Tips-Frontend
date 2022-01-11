@@ -12,17 +12,6 @@ export type PlaceInformation = {
   address: string;
 };
 
-type GetPlacesInformationRequestType = {
-  ok: boolean;
-  data: PlaceInformation[];
-};
-
-export function getPlacesInformationRequest() {
-  return axiosInstance.get<GetPlacesInformationRequestType>(
-    '/place/places-information'
-  );
-}
-
 export type SignInRequestType = {
   displayName: string;
   token: string;
@@ -64,8 +53,16 @@ export function validateTokenRequest(payload: string) {
   );
 }
 
+type GetPlacesInformationRequestType = PlaceInformation[];
+
+export function getPlacesInformationRequest() {
+  return axiosInstance.get<GetPlacesInformationRequestType>(
+    '/place/places-information'
+  );
+}
+
 export function getPlaceInformationRequest(payload: string) {
-  return axiosInstance.post<PlaceInformation>(
+  return axiosInstance.get<PlaceInformation>(
     `place/place-information/${payload}`
   );
 }

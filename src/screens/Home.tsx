@@ -116,7 +116,7 @@ function PlaceElement({
           <button className={yellowButton} title='Agregar a favoritos'>
             <FontAwesomeIcon icon={faStar} />
           </button>
-          <NavLink to={`/place/${_id}}]`}>
+          <NavLink to={`/place/${_id}`}>
             <button className={neutralButton} title='Ver detalles'>
               Ver lugar
             </button>

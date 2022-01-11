@@ -19,6 +19,10 @@ type ActionType =
       payload: PlaceInformation[];
     }
   | {
+      type: 'SET_PLACE_INFORMATION';
+      payload: PlaceInformation;
+    }
+  | {
       type: 'SET_LOADING_SIGN_IN_USER';
       payload: boolean;
     }
@@ -75,6 +79,11 @@ export default function GeneralReducer(
       return {
         ...state,
         loadingValidateToken: action.payload,
+      };
+    case 'SET_PLACE_INFORMATION':
+      return {
+        ...state,
+        placeInformation: action.payload,
       };
     default:
       return state;

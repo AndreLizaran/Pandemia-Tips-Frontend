@@ -7,7 +7,7 @@ const button =
 export const neutralButton = `${button} bg-neutral-400 hover:bg-neutral-300`;
 export const blueButton = `${button} bg-blue-600 hover:bg-blue-500`;
 export const blackButton = `${button} bg-gray-800 hover:bg-gray-700`;
-export const yellowButton = `${button} bg-yellow-500 hover:bg-yellow-400`;
+export const yellowButton = `${button} bg-yellow-400 hover:bg-yellow-300`;
 
 // Input
 export const input = 'px-4 py-2 text-mb rounded mb-4 disabled:bg-opacity-50';
