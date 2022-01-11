@@ -47,10 +47,9 @@ type ValidateTokenRequestType = {
 };
 
 export function validateTokenRequest(payload: string) {
-  return axiosInstance.post<ValidateTokenRequestType>(
-    '/user/validate-token',
-    payload
-  );
+  return axiosInstance.get<ValidateTokenRequestType>('/user/validate-token', {
+    headers: { Authorization: `Bearer ${payload}` },
+  });
 }
 
 type GetPlacesInformationRequestType = PlaceInformation[];
