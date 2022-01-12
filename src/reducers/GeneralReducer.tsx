@@ -45,6 +45,22 @@ type ActionType =
   | {
       type: 'SET_CATEGORY_SELECTED';
       payload: string;
+    }
+  | {
+      type: 'SET_LOADING_CATEGORIES';
+      payload: boolean;
+    }
+  | {
+      type: 'ADD_PLACE_TO_FAVORITES';
+      payload: string[];
+    }
+  | {
+      type: 'REMOVE_PLACE_FROM_FAVORITES';
+      payload: string[];
+    }
+  | {
+      type: 'SET_SELECTED_PLACCE_IMAGES';
+      payload: string[];
     };
 
 export default function GeneralReducer(
@@ -102,6 +118,26 @@ export default function GeneralReducer(
       return {
         ...state,
         categorySelected: action.payload,
+      };
+    case 'SET_LOADING_CATEGORIES':
+      return {
+        ...state,
+        loadingCategories: action.payload,
+      };
+    case 'ADD_PLACE_TO_FAVORITES':
+      return {
+        ...state,
+        favorites: action.payload,
+      };
+    case 'REMOVE_PLACE_FROM_FAVORITES':
+      return {
+        ...state,
+        favorites: action.payload,
+      };
+    case 'SET_SELECTED_PLACCE_IMAGES':
+      return {
+        ...state,
+        selectedPlaceImages: action.payload,
       };
     default:
       return state;

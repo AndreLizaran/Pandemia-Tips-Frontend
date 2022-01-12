@@ -3,10 +3,13 @@ import { useContext, useEffect } from 'react';
 import {
   faEye,
   faSpinner,
-  faStar,
   faTimes,
+  faStarHalfAlt,
+  faStar,
 } from '@fortawesome/free-solid-svg-icons';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ImageViewer from 'react-simple-image-viewer';
 
 // Classes
 import {
@@ -25,19 +28,31 @@ import { NavLink } from 'react-router-dom';
 
 export default function Home() {
   //
-  const { getPlacesInformation } = useContext(GeneralContext);
+  const { getPlacesInformation, selectedPlaceImages, setSelectedPlaceImages } =
+    useContext(GeneralContext);
 
   useEffect(() => {
     getPlacesInformation();
   }, []);
 
   return (
-    <Container>
-      <div className='flex flex-col md:grid md:grid-cols-12 gap-6 w-full'>
-        <PlacesInformationColumn />
-        <CategoryInformationColumn />
-      </div>
-    </Container>
+    <>
+      <Container>
+        <div className='flex flex-col md:grid md:grid-cols-12 gap-6 w-full'>
+          <PlacesInformationColumn />
+          <CategoryInformationColumn />
+        </div>
+      </Container>
+      {selectedPlaceImages.length > 0 && (
+        <ImageViewer
+          src={selectedPlaceImages}
+          currentIndex={0}
+          disableScroll={false}
+          closeOnClickOutside={true}
+          onClose={() => setSelectedPlaceImages([])}
+        />
+      )}
+    </>
   );
 }
 
@@ -69,14 +84,14 @@ function PlacesInformationColumn() {
 
 function CategoryInformationColumn() {
   //
-  const { loadingGetPlacesInformation } = useContext(GeneralContext);
+  const { loadingCategories } = useContext(GeneralContext);
 
   return (
     <div className='flex flex-col md:col-start-9 md:col-end-13'>
       <div className='px-6 py-4 bg-neutral-600 rounded-t'>
         <h2 className={generalTitle}>Categorias</h2>
       </div>
-      {loadingGetPlacesInformation ? <LoadingCard /> : <CategoriesContainer />}
+      {loadingCategories ? <LoadingCard /> : <CategoriesContainer />}
     </div>
   );
 }
@@ -98,7 +113,7 @@ function PlacesInformationContainer() {
   const { placesInformation } = useContext(GeneralContext);
 
   return (
-    <div className='flex flex-col lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6 p-6 bg-white rounded-b'>
+    <div className='flex flex-col lg:grid lg:grid-cols-2 2xl:grid-cols-3 gap-6 p-6 bg-white rounded-b'>
       {placesInformation.map((place, key: number) => (
         //@ts-ignore
         <PlaceElement place={place} key={place._id} />
@@ -112,30 +127,48 @@ type PlaceElementProps = {
 };
 
 function PlaceElement({
-  place: { title, description, _id },
+  place: { title, description, _id, images },
 }: PlaceElementProps) {
   //
+  const {
+    favorites,
+    addPlaceToFavorites,
+    removePlaceFromFavorites,
+    setSelectedPlaceImages,
+  } = useContext(GeneralContext);
+
   return (
     <div className='flex flex-col rounded'>
-      <img
-        className='rounded-t'
-        src={
-          'https://centralelectoral.ine.mx/wp-content/uploads/2021/01/1-2.jpg'
-        }
-      />
+      <img className='rounded-t' src={images[0]} />
       <div className='rounded-b bg-gray-200 py-4 px-6'>
         <h3 className='text-lg font-semibold text-gray-800'>{title}</h3>
         <p className='mb-4'>{description}</p>
         <div className='flex gap-4'>
-          <button className={yellowButton} title='Agregar a favoritos'>
-            <FontAwesomeIcon icon={faStar} />
+          <button
+            className={yellowButton}
+            title='Agregar a favoritos'
+            onClick={() =>
+              favorites.includes(_id)
+                ? removePlaceFromFavorites(_id)
+                : addPlaceToFavorites(_id)
+            }
+          >
+            {favorites.includes(_id) ? (
+              <FontAwesomeIcon icon={faStar} />
+            ) : (
+              <FontAwesomeIcon icon={faStarHalfAlt} />
+            )}
           </button>
           <NavLink to={`/place/${_id}`}>
             <button className={neutralButton} title='Ver detalles'>
               Ver lugar
             </button>
           </NavLink>
-          <button className={blueButton} title='Ver fotos del lugar'>
+          <button
+            className={blueButton}
+            title='Ver fotos del lugar'
+            onClick={() => setSelectedPlaceImages(images)}
+          >
             <FontAwesomeIcon icon={faEye} />
           </button>
         </div>

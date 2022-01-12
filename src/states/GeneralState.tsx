@@ -8,6 +8,7 @@ import GeneralReducer from '../reducers/GeneralReducer';
 // Requests
 import {
   getPlaceInformationRequest,
+  getPlacesByCategory,
   getPlacesInformationRequest,
   GetPlacesInformationRequestType,
   signInUserRequest,
@@ -22,12 +23,14 @@ const initialState: InitialStateType = {
   // User
   token: '',
   displayName: '',
+  favorites: [],
   // Places
   placeInformation: null,
   placesInformation: [],
   favoritePlacesInformation: [],
   categories: [],
   categorySelected: '',
+  selectedPlaceImages: [],
   // Loadings user
   loadingSignInUser: false,
   loadingSignUpUser: false,
@@ -51,9 +54,10 @@ export const GeneralContext = createContext({
   // Places functions
   getPlaceInformation: function (payload: string) {},
   getPlacesInformation: function () {},
-  addPlaceToFavorites: function () {},
-  removePlaceFromFavorites: function () {},
+  addPlaceToFavorites: function (payload: string) {},
+  removePlaceFromFavorites: function (payload: string) {},
   setCategorySelected: function (payload: string) {},
+  setSelectedPlaceImages: function (payload: string[]) {},
 });
 
 type GeneralStateProps = {
@@ -115,12 +119,14 @@ export default function GeneralState({ children }: GeneralStateProps) {
   async function getPlacesInformation() {
     try {
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: true });
+      dispatch({ type: 'SET_LOADING_CATEGORIES', payload: true });
       const { data } = await getPlacesInformationRequest();
       dispatch({
         type: 'SET_CATEGORIES_INFORMATION',
         payload: setCategories(data),
       });
       dispatch({ type: 'SET_PLACES_INFORMATION', payload: data });
+      dispatch({ type: 'SET_LOADING_CATEGORIES', payload: false });
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: false });
     } catch (error: any) {
       console.log(error);
@@ -151,18 +157,34 @@ export default function GeneralState({ children }: GeneralStateProps) {
 
   async function setCategorySelected(payload: string) {
     try {
+      dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: true });
       dispatch({ type: 'SET_CATEGORY_SELECTED', payload });
+      const { data } = await getPlacesByCategory(payload);
+      dispatch({ type: 'SET_PLACES_INFORMATION', payload: data });
+      dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });
+    } catch (error: any) {
+      dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });
+    }
+  }
+
+  function addPlaceToFavorites(payload: string) {
+    try {
+      const newFavorites = [...state.favorites, payload];
+      dispatch({ type: 'ADD_PLACE_TO_FAVORITES', payload: newFavorites });
     } catch (error: any) {}
   }
 
-  function addPlaceToFavorites() {
+  function removePlaceFromFavorites(payload: string) {
     try {
+      const newFavorites = state.favorites.filter((fav) => {
+        if (fav !== payload) return fav;
+      });
+      dispatch({ type: 'REMOVE_PLACE_FROM_FAVORITES', payload: newFavorites });
     } catch (error: any) {}
   }
 
-  function removePlaceFromFavorites() {
-    try {
-    } catch (error: any) {}
+  function setSelectedPlaceImages(payload: string[]) {
+    dispatch({ type: 'SET_SELECTED_PLACCE_IMAGES', payload });
   }
 
   const combinedFunctions = {
@@ -174,6 +196,7 @@ export default function GeneralState({ children }: GeneralStateProps) {
     addPlaceToFavorites,
     removePlaceFromFavorites,
     setCategorySelected,
+    setSelectedPlaceImages,
   };
 
   return (

@@ -52,16 +52,34 @@ export function validateTokenRequest(payload: string) {
   });
 }
 
+// Places
+
 export type GetPlacesInformationRequestType = PlaceInformation[];
 
 export function getPlacesInformationRequest() {
-  return axiosInstance.get<GetPlacesInformationRequestType>(
-    '/place/places-information'
-  );
+  return axiosInstance.get<GetPlacesInformationRequestType>('/place');
 }
 
 export function getPlaceInformationRequest(payload: string) {
   return axiosInstance.get<PlaceInformation>(
-    `place/place-information/${payload}`
+    `/place/place-information/${payload}`
   );
+}
+
+export function getPlacesByCategory(payload: string) {
+  return axiosInstance.get<GetPlacesInformationRequestType>(
+    `/place/category/${payload}`
+  );
+}
+
+export function addPlaceToFavorites(payload: string) {
+  return axiosInstance.get<any>(`/place/add-favorite/${payload}`, {
+    headers: { Authorization: `Bearer ${payload}` },
+  });
+}
+
+export function removePlaceFromFavorites(payload: string) {
+  return axiosInstance.get<any>(`/place/remove-favorite/${payload}`, {
+    headers: { Authorization: `Bearer ${payload}` },
+  });
 }
