@@ -170,7 +170,10 @@ export default function GeneralState({ children }: GeneralStateProps) {
   async function setCategorySelected(payload: string) {
     try {
       dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: true });
-      dispatch({ type: 'SET_CATEGORY_SELECTED', payload });
+      dispatch({
+        type: 'SET_CATEGORY_SELECTED',
+        payload: payload === 'any' ? '' : payload,
+      });
       const { data } = await getPlacesByCategory(payload);
       dispatch({ type: 'SET_PLACES_INFORMATION', payload: data });
       dispatch({ type: 'SET_LOADING_GET_PLACE_INFORMATION', payload: false });

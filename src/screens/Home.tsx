@@ -8,6 +8,8 @@ import {
   faStar,
 } from '@fortawesome/free-solid-svg-icons';
 
+import { faStar as faStarEmpty } from '@fortawesome/free-regular-svg-icons';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ImageViewer from 'react-simple-image-viewer';
 
@@ -68,7 +70,10 @@ function PlacesInformationColumn() {
           {categorySelected ? categorySelected : 'Lugares'}
         </h2>
         {categorySelected && (
-          <button className={redButton} onClick={() => setCategorySelected('')}>
+          <button
+            className={redButton}
+            onClick={() => setCategorySelected('any')}
+          >
             <FontAwesomeIcon icon={faTimes} />
           </button>
         )}
@@ -156,7 +161,7 @@ function PlaceElement({
             {favorites.includes(_id) ? (
               <FontAwesomeIcon icon={faStar} />
             ) : (
-              <FontAwesomeIcon icon={faStarHalfAlt} />
+              <FontAwesomeIcon icon={faStarEmpty} />
             )}
           </button>
           <NavLink to={`/place/${_id}`}>
