@@ -72,14 +72,14 @@ export function getPlacesByCategory(payload: string) {
   );
 }
 
-export function addPlaceToFavorites(payload: string) {
-  return axiosInstance.get<any>(`/place/add-favorite/${payload}`, {
+export function addPlaceToFavoritesRequest(id: string, payload: string) {
+  return axiosInstance.get<any>(`/place/add-favorite/${id}`, {
     headers: { Authorization: `Bearer ${payload}` },
   });
 }
 
-export function removePlaceFromFavorites(payload: string) {
-  return axiosInstance.get<any>(`/place/remove-favorite/${payload}`, {
+export function removePlaceFromFavoritesRequest(id: string, payload: string) {
+  return axiosInstance.get<any>(`/place/remove-favorite/${id}`, {
     headers: { Authorization: `Bearer ${payload}` },
   });
 }

@@ -1,10 +1,10 @@
 // Modules
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
 
 // Classes
-import { blueButton } from '../utils/classes';
+import { blueButton, yellowButton } from '../utils/classes';
 
 export default function Navbar() {
   //
@@ -13,11 +13,16 @@ export default function Navbar() {
       <NavLink to='/'>
         <h1 className='text-white text-xl font-semibold'>Pandemia Tips</h1>
       </NavLink>
-      <NavLink to='/sign-in'>
-        <button className={blueButton}>
-          <FontAwesomeIcon icon={faUser} />
+      <div className='flex gap-4'>
+        <button className={yellowButton}>
+          <FontAwesomeIcon icon={faStar} />
         </button>
-      </NavLink>
+        <NavLink to='/sign-in'>
+          <button className={blueButton}>
+            <FontAwesomeIcon icon={faUser} />
+          </button>
+        </NavLink>
+      </div>
     </nav>
   );
 }

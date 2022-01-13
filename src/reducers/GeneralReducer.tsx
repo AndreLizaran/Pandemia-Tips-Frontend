@@ -59,7 +59,7 @@ type ActionType =
       payload: string[];
     }
   | {
-      type: 'SET_SELECTED_PLACCE_IMAGES';
+      type: 'SET_SELECTED_PLACE_IMAGES';
       payload: string[];
     };
 
@@ -134,7 +134,7 @@ export default function GeneralReducer(
         ...state,
         favorites: action.payload,
       };
-    case 'SET_SELECTED_PLACCE_IMAGES':
+    case 'SET_SELECTED_PLACE_IMAGES':
       return {
         ...state,
         selectedPlaceImages: action.payload,

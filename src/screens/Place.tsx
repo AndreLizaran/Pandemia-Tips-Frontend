@@ -43,9 +43,7 @@ export default function Place() {
             </div>
             <div className='p-6 bg-white rounded-b flex flex-col'>
               <img
-                src={
-                  'https://centralelectoral.ine.mx/wp-content/uploads/2021/01/1-2.jpg'
-                }
+                src={placeInformation.images[0]}
                 className='rounded mb-4 cursor-pointer'
               />
               <h3 className='font-semibold'>Descripción</h3>

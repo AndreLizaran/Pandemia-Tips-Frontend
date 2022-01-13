@@ -7,10 +7,12 @@ import GeneralReducer from '../reducers/GeneralReducer';
 
 // Requests
 import {
+  addPlaceToFavoritesRequest,
   getPlaceInformationRequest,
   getPlacesByCategory,
   getPlacesInformationRequest,
   GetPlacesInformationRequestType,
+  removePlaceFromFavoritesRequest,
   signInUserRequest,
   signUpUserRequest,
   validateTokenRequest,
@@ -50,6 +52,7 @@ export const GeneralContext = createContext({
     email: string;
     password: string;
   }) {},
+  signOut: function () {},
   validateToken: function (payload: string) {},
   // Places functions
   getPlaceInformation: function (payload: string) {},
@@ -116,6 +119,15 @@ export default function GeneralState({ children }: GeneralStateProps) {
     } else dispatch({ type: 'SET_LOADING_VALIDATE_TOKEN', payload: false });
   }
 
+  function signOut() {
+    navigator('/');
+    localStorage.removeItem('pand-tips');
+    dispatch({
+      type: 'SET_USER_INFORMATION',
+      payload: { displayName: '', token: '' },
+    });
+  }
+
   async function getPlacesInformation() {
     try {
       dispatch({ type: 'SET_LOADING_GET_PLACES_INFORMATION', payload: true });
@@ -167,15 +179,17 @@ export default function GeneralState({ children }: GeneralStateProps) {
     }
   }
 
-  function addPlaceToFavorites(payload: string) {
+  async function addPlaceToFavorites(payload: string) {
     try {
+      await addPlaceToFavoritesRequest(payload, state.token);
       const newFavorites = [...state.favorites, payload];
       dispatch({ type: 'ADD_PLACE_TO_FAVORITES', payload: newFavorites });
     } catch (error: any) {}
   }
 
-  function removePlaceFromFavorites(payload: string) {
+  async function removePlaceFromFavorites(payload: string) {
     try {
+      await removePlaceFromFavoritesRequest(payload, state.token);
       const newFavorites = state.favorites.filter((fav) => {
         if (fav !== payload) return fav;
       });
@@ -184,12 +198,13 @@ export default function GeneralState({ children }: GeneralStateProps) {
   }
 
   function setSelectedPlaceImages(payload: string[]) {
-    dispatch({ type: 'SET_SELECTED_PLACCE_IMAGES', payload });
+    dispatch({ type: 'SET_SELECTED_PLACE_IMAGES', payload });
   }
 
   const combinedFunctions = {
     signIn,
     signUp,
+    signOut,
     validateToken,
     getPlaceInformation,
     getPlacesInformation,
